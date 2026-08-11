@@ -21,14 +21,6 @@
     <main id="top">
       <section class="hero">
         <h1>Structured Action-Space<br>Exploration for <em>Flow-Based VLAs</em></h1>
-        <div class="actions">
-          <a class="button primary" href="paper.pdf" target="_blank" rel="noopener">
-            <span aria-hidden="true">↗</span> Paper
-          </a>
-          <span class="button muted" aria-label="Code will be released soon">
-            <span aria-hidden="true">⌘</span> Code coming soon
-          </span>
-        </div>
         <div class="hero-visual" aria-label="Overview of StructRL">
           <img src="assets/motivation.pdf.png" alt="Comparison of in-chain and action-space structured exploration for flow-based VLA reinforcement learning.">
         </div>
@@ -126,19 +118,42 @@
 
       <section id="real-world" class="section real-world">
         <div class="section-label">04 / Real-World Experiments</div>
-        <div class="blank-panel" role="note">
-          <span>Reserved</span>
-          <h2>Real-world results</h2>
-          <p>This section is intentionally left blank for the upcoming hardware experiments. No videos are included.</p>
-        </div>
-      </section>
-
-      <section class="section citation">
-        <div class="section-label">05 / Citation</div>
-        <div>
-          <h2>Read the paper</h2>
-          <p>The paper PDF is included with this project page.</p>
-          <a class="text-link" href="paper.pdf" target="_blank" rel="noopener">Open paper <span aria-hidden="true">↗</span></a>
+        <div class="real-content">
+          <div class="real-heading">
+            <div>
+              <h2>From ten demonstrations to reliable real-world manipulation.</h2>
+              <p>We initialize each policy with SFT on 10 collected trajectories, then continue online reinforcement learning with <strong>StructRL + AWAC</strong>.</p>
+            </div>
+            <div class="training-path" aria-label="Real-world training pipeline">
+              <span>10 trajectories</span><b>→</b><span>SFT</span><b>→</b><span>StructRL + AWAC</span>
+            </div>
+          </div>
+          <div class="real-cards">
+            <article class="real-card">
+              <figure>
+                <img src="assets/step-30-eval.mp4.png" alt="A Franka robot placing a banana into a basket during the Pick Banana experiment.">
+                <figcaption>Pick Banana · final online-RL evaluation</figcaption>
+              </figure>
+              <div class="real-card-body">
+                <p class="task-label">Task 01</p>
+                <h3>Pick Banana</h3>
+                <div class="success-change" aria-label="Success rate rises from 4 percent to 84 percent"><span>4<small>%</small></span><b>→</b><strong>84<small>%</small></strong></div>
+                <p>Success rate after online RL improves by <strong>80 percentage points</strong> over the SFT-initialized policy.</p>
+              </div>
+            </article>
+            <article class="real-card accent-card">
+              <figure>
+                <img src="assets/online-rl.mp4.png" alt="A Franka robot performing the Plug Charger In task during online reinforcement learning.">
+                <figcaption>Plug Charger In · final online-RL evaluation</figcaption>
+              </figure>
+              <div class="real-card-body">
+                <p class="task-label">Task 02</p>
+                <h3>Plug Charger In</h3>
+                <div class="success-change" aria-label="Success rate rises from 0 percent to 100 percent"><span>0<small>%</small></span><b>→</b><strong>100<small>%</small></strong></div>
+                <p>Online adaptation reaches <strong>perfect success</strong> on this precise insertion task.</p>
+              </div>
+            </article>
+          </div>
         </div>
       </section>
     </main>
