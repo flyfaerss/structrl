@@ -76,7 +76,9 @@ tbody tr.ours { background: #e3edbf; }
 .real-cards { display: grid; grid-template-columns: 1fr 1fr; gap: 22px; margin-top: 46px; }
 .real-card { overflow: hidden; border: 1px solid var(--line); background: #fffefa; }
 .real-card figure { margin: 0; background: var(--ink); }
-.real-card figure img { display: block; width: 100%; aspect-ratio: 16 / 9; object-fit: cover; }
+.real-video { position: relative; }
+.real-card figure video { display: block; width: 100%; aspect-ratio: 16 / 9; object-fit: cover; background: #0d1414; }
+.speed-badge { position: absolute; top: 12px; right: 12px; z-index: 1; padding: 6px 9px; border: 1px solid #ffffff70; border-radius: 99px; background: #172121d9; color: white; font-size: .66rem; font-weight: 800; letter-spacing: .05em; text-transform: uppercase; pointer-events: none; }
 .real-card figcaption { margin: 0; padding: 10px 13px; color: #cbd3ca; font-size: .73rem; background: var(--ink); }
 .real-card-body { padding: 23px 25px 27px; }
 .task-label { margin: 0; color: var(--accent); font-size: .68rem; font-weight: 800; letter-spacing: .12em; text-transform: uppercase; }
