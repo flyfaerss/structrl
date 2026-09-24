@@ -4,7 +4,7 @@ This folder is a dependency-free static project page for the paper **StructRL: S
 
 ## Local preview
 
-Open `index.html` in a browser, or serve this directory with any static HTTP server. The page includes its paper PDF and all image assets; it does not include real-world videos.
+Open `index.html` in a browser, or serve this directory with any static HTTP server. The page includes the ICLR manuscript PDF, image assets, and two real-world videos.
 
 ## Publish on GitHub Pages
 

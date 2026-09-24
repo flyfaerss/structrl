@@ -15,12 +15,14 @@
         <a href="#method">Method</a>
         <a href="#results">Results</a>
         <a href="#real-world">Real World</a>
+        <a href="paper.pdf">Paper (PDF)</a>
       </nav>
     </header>
 
     <main id="top">
       <section class="hero">
         <h1>Structured Action-Space<br>Exploration for <em>Flow-Based VLAs</em></h1>
+        <a class="paper-link" href="paper.pdf">Read the paper (PDF) ↗</a>
         <div class="hero-visual" aria-label="Overview of StructRL">
           <img src="assets/motivation.pdf.png" alt="Comparison of in-chain and action-space structured exploration for flow-based VLA reinforcement learning.">
         </div>
@@ -40,27 +42,27 @@
         <div class="method-grid">
           <div class="prose">
             <h2>Deterministic decoding.<br><em>Structured</em> exploration.</h2>
-            <p>StructRL decodes a clean action chunk with a deterministic ODE, then adds noise directly in action space. The noise is smooth over the chunk and learns separate scales for position, rotation, and gripper controls.</p>
-            <p>Last-step replay supplies a tractable policy-gradient signal to the flow decoder, without assigning likelihoods to intermediate denoising states.</p>
+            <p>StructRL decodes a clean action chunk with a deterministic ODE, then adds noise directly in action space. Fixed AR(1) correlation smooths the noise over the chunk. The decoder's terminal features predict a scale for each action dimension and time step, within bounds set for position, rotation, and gripper controls.</p>
+            <p>Terminal replay supplies a tractable policy-gradient signal to the flow decoder without assigning likelihoods to intermediate denoising states. The default setting replays the last denoising step.</p>
           </div>
           <figure class="paper-figure framework">
-            <img src="assets/framework.pdf.png" alt="StructRL framework: deterministic reverse flow, structured action-space noise, and last-step replay.">
-            <figcaption>StructRL decodes an action deterministically, adds structured noise at the endpoint, and replays the final step for learning.</figcaption>
+            <img src="assets/framework.pdf.png" alt="StructRL framework: deterministic reverse flow, structured action-space noise, and terminal replay.">
+            <figcaption>StructRL decodes an action deterministically, adds structured noise at the endpoint, and replays the final denoising step by default for learning.</figcaption>
           </figure>
         </div>
         <div class="pillars">
           <article><span>01</span><h3>Action-space noise</h3><p>Exploration is attached to the executed action, avoiding dilution.</p></article>
           <article><span>02</span><h3>AR(1) correlation</h3><p>Smooth noise matches the temporal structure of action chunks.</p></article>
-          <article><span>03</span><h3>Group-aware scales</h3><p>Position, rotation, and gripper controls explore at appropriate magnitudes.</p></article>
-          <article><span>04</span><h3>Last-step replay</h3><p>An efficient learning signal for flow-decoder post-training.</p></article>
+          <article><span>03</span><h3>Group-aware scales</h3><p>State-conditioned scales are bounded separately for position, rotation, and gripper controls.</p></article>
+          <article><span>04</span><h3>Terminal replay</h3><p>The final denoising steps provide an efficient learning signal.</p></article>
         </div>
       </section>
 
       <section id="results" class="section results">
         <div class="section-label">03 / Simulation Results</div>
         <div class="results-heading">
-          <h2>Structured exploration improves performance across simulation benchmarks.</h2>
-          <p>We evaluate StructRL on LIBERO and ManiSkill with three flow-based VLA backbones. Green marks StructRL; bold marks the best result within each backbone group.</p>
+          <h2>Action-space exploration improves OOD performance; structured noise speeds learning.</h2>
+          <p>We evaluate StructRL on LIBERO, ManiSkill, and CALVIN across three flow-based VLA backbones. Green marks StructRL; bold marks the best result in each column, including ties.</p>
         </div>
         <div class="data-tables">
           <div class="table-block">
@@ -70,19 +72,19 @@
                 <thead><tr><th>Backbone</th><th>Method</th><th>Spatial</th><th>Object</th><th>Goal</th><th>Long</th><th>Avg.</th></tr></thead>
                 <tbody>
                   <tr class="group-start"><td rowspan="4">GR00T N1.5</td><td>Few-shot SFT</td><td>41.4</td><td>58.6</td><td>48.2</td><td>61.9</td><td>52.5</td></tr>
-                  <tr><td>π<sub>RL</sub> (Flow-SDE + PPO)</td><td>96.6</td><td>100.0</td><td>93.8</td><td>95.6</td><td>96.5</td></tr>
+                  <tr><td>π<sub>RL</sub> (Flow-SDE + PPO)</td><td>96.6</td><td><strong>100.0</strong></td><td>93.8</td><td>95.6</td><td>96.5</td></tr>
                   <tr><td>Baseline</td><td>96.2</td><td>99.4</td><td>91.8</td><td>95.6</td><td>95.8</td></tr>
                   <tr class="ours"><td>StructRL</td><td><strong>99.2</strong></td><td><strong>100.0</strong></td><td><strong>97.6</strong></td><td><strong>99.0</strong></td><td><strong>99.0</strong></td></tr>
                   <tr class="group-start"><td rowspan="5">π<sub>0</sub></td><td>Few-shot SFT</td><td>65.3</td><td>64.4</td><td>49.8</td><td>51.2</td><td>57.6</td></tr>
                   <tr><td>π<sub>RL</sub> (Flow-SDE + PPO)</td><td>98.4</td><td>99.4</td><td>96.2</td><td>90.2</td><td>96.0</td></tr>
                   <tr><td>π-StepNFT</td><td>93.5</td><td>98.0</td><td>83.7</td><td>86.7</td><td>90.5</td></tr>
-                  <tr><td>Baseline</td><td>98.8</td><td>99.0</td><td>97.2</td><td>90.2</td><td>96.3</td></tr>
+                  <tr><td>Baseline</td><td><strong>98.8</strong></td><td>99.0</td><td>97.2</td><td>90.2</td><td>96.3</td></tr>
                   <tr class="ours"><td>StructRL</td><td><strong>98.8</strong></td><td><strong>99.8</strong></td><td><strong>98.4</strong></td><td><strong>91.8</strong></td><td><strong>97.2</strong></td></tr>
                   <tr class="group-start"><td rowspan="5">π<sub>0.5</sub></td><td>Few-shot SFT</td><td>84.6</td><td>95.4</td><td>84.6</td><td>43.9</td><td>77.1</td></tr>
-                  <tr><td>π<sub>RL</sub> (Flow-SDE + PPO)</td><td>99.6</td><td>100.0</td><td>98.8</td><td><strong>93.0</strong></td><td><strong>97.9</strong></td></tr>
-                  <tr><td>π-StepNFT</td><td>97.8</td><td>100.0</td><td>98.2</td><td>79.8</td><td>94.0</td></tr>
-                  <tr><td>Baseline</td><td>99.4</td><td>100.0</td><td>93.8</td><td>86.0</td><td>94.8</td></tr>
-                  <tr class="ours"><td>StructRL</td><td><strong>99.6</strong></td><td>99.8</td><td><strong>98.8</strong></td><td>90.2</td><td>97.2</td></tr>
+                  <tr><td>π<sub>RL</sub> (Flow-SDE + PPO)</td><td><strong>99.6</strong></td><td><strong>100.0</strong></td><td><strong>98.8</strong></td><td><strong>93.0</strong></td><td><strong>97.9</strong></td></tr>
+                  <tr><td>π-StepNFT</td><td>97.8</td><td><strong>100.0</strong></td><td>98.2</td><td>79.8</td><td>94.0</td></tr>
+                  <tr><td>Baseline</td><td>99.4</td><td><strong>100.0</strong></td><td>93.8</td><td>86.0</td><td>94.8</td></tr>
+                  <tr class="ours"><td>StructRL</td><td><strong>99.6</strong></td><td><strong>100.0</strong></td><td><strong>98.8</strong></td><td>90.2</td><td>97.2</td></tr>
                 </tbody>
               </table>
             </div>
@@ -98,11 +100,26 @@
                   <tr><td>π-StepNFT</td><td>79.2</td><td>69.1</td><td>49.1</td><td>33.1</td><td>50.4</td></tr>
                   <tr><td>Baseline</td><td>84.1</td><td>79.4</td><td>63.3</td><td><strong>59.1</strong></td><td><strong>67.3</strong></td></tr>
                   <tr class="ours"><td>StructRL</td><td><strong>87.8</strong></td><td><strong>80.0</strong></td><td><strong>64.2</strong></td><td>56.2</td><td>66.8</td></tr>
-                  <tr class="group-start"><td rowspan="5">π<sub>0.5</sub></td><td>SFT</td><td>40.1</td><td>38.8</td><td>16.2</td><td>22.3</td><td>25.9</td></tr>
-                  <tr><td>π<sub>RL</sub> (Flow-SDE + PPO)</td><td>90.9</td><td>68.0</td><td>34.5</td><td>45.4</td><td>49.3</td></tr>
+                  <tr class="group-start"><td rowspan="5">π<sub>0.5</sub></td><td>SFT</td><td>40.1</td><td>38.8</td><td>16.6</td><td>22.3</td><td>25.9</td></tr>
+                  <tr><td>π<sub>RL</sub> (Flow-SDE + PPO)</td><td><strong>90.9</strong></td><td>68.0</td><td>34.5</td><td>45.4</td><td>49.3</td></tr>
                   <tr><td>π-StepNFT</td><td>85.4</td><td>76.9</td><td>56.6</td><td>45.1</td><td>59.5</td></tr>
                   <tr><td>Baseline</td><td>85.9</td><td>76.2</td><td>62.2</td><td>59.4</td><td>65.9</td></tr>
                   <tr class="ours"><td>StructRL</td><td><strong>90.9</strong></td><td><strong>78.3</strong></td><td><strong>68.4</strong></td><td><strong>64.2</strong></td><td><strong>70.3</strong></td></tr>
+                </tbody>
+              </table>
+            </div>
+          </div>
+          <div class="table-block">
+            <div class="table-title"><span>Table 3 · Appendix</span><h3>CALVIN long-horizon chaining (π<sub>0.5</sub>; success fraction)</h3></div>
+            <div class="table-scroll">
+              <table class="calvin-table">
+                <thead><tr><th>Method</th><th>Len1</th><th>Len2</th><th>Len3</th><th>Len4</th><th>Len5</th><th>Avg. length</th></tr></thead>
+                <tbody>
+                  <tr class="group-start"><td>SFT</td><td>0.927</td><td>0.843</td><td>0.767</td><td>0.688</td><td>0.613</td><td>3.838</td></tr>
+                  <tr><td>π<sub>RL</sub> (Flow-SDE + PPO)</td><td>0.997</td><td>0.982</td><td>0.958</td><td>0.910</td><td>0.870</td><td>4.717</td></tr>
+                  <tr><td>π<sub>RL</sub> (Flow-Noise + PPO)</td><td>0.996</td><td>0.976</td><td>0.939</td><td>0.896</td><td>0.845</td><td>4.652</td></tr>
+                  <tr><td>Baseline</td><td>0.998</td><td>0.990</td><td>0.964</td><td>0.929</td><td>0.868</td><td>4.749</td></tr>
+                  <tr class="ours"><td>StructRL</td><td><strong>1.000</strong></td><td><strong>0.993</strong></td><td><strong>0.968</strong></td><td><strong>0.934</strong></td><td><strong>0.880</strong></td><td><strong>4.775</strong></td></tr>
                 </tbody>
               </table>
             </div>
@@ -122,10 +139,10 @@
           <div class="real-heading">
             <div>
               <h2>From ten demonstrations to reliable real-world manipulation.</h2>
-              <p>We initialize each policy with SFT on 10 collected trajectories, then continue online reinforcement learning with <strong>StructRL + AWAC</strong>.</p>
+              <p>We initialize each policy with SFT on 10 demonstrations, with 0% success over 25 trials before online RL. We then continue training with <strong>StructRL + AWAC</strong> and compare against Gaussian action-space exploration.</p>
             </div>
             <div class="training-path" aria-label="Real-world training pipeline">
-              <span>10 trajectories</span><b>→</b><span>SFT</span><b>→</b><span>StructRL + AWAC</span>
+              <span>10 demonstrations</span><b>→</b><span>SFT</span><b>→</b><span>StructRL + AWAC</span>
             </div>
           </div>
           <div class="real-cards">
@@ -141,8 +158,8 @@
               <div class="real-card-body">
                 <p class="task-label">Task 01</p>
                 <h3>Pick Banana</h3>
-                <div class="success-change" aria-label="Success rate rises from 4 percent to 84 percent"><span>4<small>%</small></span><b>→</b><strong>84<small>%</small></strong></div>
-                <p>Success rate after online RL improves by <strong>80 percentage points</strong> over the SFT-initialized policy.</p>
+                <div class="success-change" aria-label="Success rate rises from 0 percent before online RL to 84 percent after 60 minutes"><span>0<small>%</small></span><b>→</b><strong>84<small>%</small></strong></div>
+                <p>After 60 minutes, StructRL succeeds in <strong>21/25 trials (84%)</strong>; the Gaussian baseline succeeds in <strong>14/25 (56%)</strong>.</p>
               </div>
             </article>
             <article class="real-card accent-card">
@@ -157,8 +174,8 @@
               <div class="real-card-body">
                 <p class="task-label">Task 02</p>
                 <h3>Plug Charger In</h3>
-                <div class="success-change" aria-label="Success rate rises from 0 percent to 100 percent"><span>0<small>%</small></span><b>→</b><strong>100<small>%</small></strong></div>
-                <p>Online adaptation reaches <strong>perfect success</strong> on this precise insertion task.</p>
+                <div class="convergence-metric" aria-label="StructRL reaches stable success after about 30 minutes"><strong>≈30<small> min</small></strong><span>to stable success</span></div>
+                <p>The SFT policy starts at <strong>0% success</strong>. StructRL reaches stable, fully successful behavior after about <strong>30 minutes</strong>; the Gaussian baseline takes about <strong>35 minutes</strong>.</p>
               </div>
             </article>
           </div>
